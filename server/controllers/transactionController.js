@@ -36,18 +36,14 @@ const getTransactions = async (req, res) => {
 // GET /api/summary
 const getSummary = async (req, res) => {
   try {
-    // Existing overall summary
-
+    const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     const result = await Transaction.aggregate([
       {
         $match: {
-          createdAt: {
-            $gte: startOfDay,
-            $lt: endOfDay,
-          },
+          createdAt: { $gte: startOfDay, $lt: endOfDay },
         },
       },
       {
@@ -58,12 +54,7 @@ const getSummary = async (req, res) => {
       },
     ]);
 
-    const summary = {
-      sale: 0,
-      credit: 0,
-      purchase: 0,
-      monthlyPurchase: 0,
-    };
+    const summary = { sale: 0, credit: 0, purchase: 0, monthlyPurchase: 0 };
 
     result.forEach((item) => {
       summary[item._id] = item.total;
@@ -71,22 +62,13 @@ const getSummary = async (req, res) => {
 
     summary.estimatedCash = summary.sale - summary.purchase;
 
-    // Current month's purchase total
-    const now = new Date();
-
-    const startOfMonth = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      1
-    );
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const monthlyPurchase = await Transaction.aggregate([
       {
         $match: {
           type: "purchase",
-          createdAt: {
-            $gte: startOfMonth,
-          },
+          createdAt: { $gte: startOfMonth },
         },
       },
       {
@@ -97,17 +79,13 @@ const getSummary = async (req, res) => {
       },
     ]);
 
-    summary.monthlyPurchase =
-      monthlyPurchase.length > 0
-        ? monthlyPurchase[0].total
-        : 0;
+    summary.monthlyPurchase = monthlyPurchase.length > 0 ? monthlyPurchase[0].total : 0;
 
     res.json(summary);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 // DELETE /api/transaction/last  (undo)
 const deleteLastTransaction = async (req, res) => {
   try {
