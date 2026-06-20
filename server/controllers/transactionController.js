@@ -86,18 +86,6 @@ const getSummary = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-// DELETE /api/transaction/last  (undo)
-const deleteLastTransaction = async (req, res) => {
-  try {
-    const last = await Transaction.findOne().sort({ createdAt: -1 });
-    if (!last) return res.status(404).json({ error: "No transactions found" });
-
-    await Transaction.findByIdAndDelete(last._id);
-    res.json({ message: "Last transaction deleted", deleted: last });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 // DELETE /api/transaction/:id
 const deleteTransaction = async (req, res) => {
@@ -170,5 +158,4 @@ module.exports = {
   getSummary,
   getMonthlySummary,
   deleteTransaction,
-  deleteLastTransaction,
 };

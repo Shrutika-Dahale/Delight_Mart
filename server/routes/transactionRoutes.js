@@ -6,12 +6,10 @@ const {
   getTransactions,
   getSummary,
   deleteTransaction,
-  deleteLastTransaction,
   getMonthlySummary,
 } = require("../controllers/transactionController");
 
-// IMPORTANT: /last must be before /:id
-router.delete("/transaction/last", deleteLastTransaction);
+
 
 router.post("/transaction", addTransaction);
 router.get("/transactions", getTransactions);

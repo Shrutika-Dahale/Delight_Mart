@@ -132,21 +132,6 @@ function Dashboard() {
         )}
       </div>
 
-      <div className="purchase-section">
-        <h2 className="purchase-title">
-          📅 Monthly Purchase
-        </h2>
-
-        <div className="summary-card monthly-purchase">
-          <div className="card-label">
-            This Month's Purchases
-          </div>
-
-          <div className="card-amount">
-            ₹{(summary.monthlyPurchase || 0).toFixed(2)}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

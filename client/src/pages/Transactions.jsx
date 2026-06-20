@@ -32,18 +32,6 @@ function Transactions() {
     }
   };
 
-  const handleUndo = async () => {
-    try {
-      const res = await fetch(`${API}/transaction/last`, { method: "DELETE" });
-      if (res.ok) {
-        fetchTransactions();
-      } else {
-        alert("Nothing to undo");
-      }
-    } catch (err) {
-      alert("Undo failed");
-    }
-  };
 
   const formatTime = (dateStr) => {
     const d = new Date(dateStr);
@@ -65,11 +53,6 @@ function Transactions() {
     <div className="txn-page">
       <div className="txn-header">
         <h2 className="page-title">All Transactions</h2>
-        {transactions.length > 0 && (
-          <button className="undo-btn" onClick={handleUndo}>
-            ↩️ Undo Last
-          </button>
-        )}
       </div>
 
       {transactions.length === 0 ? (
