@@ -34,11 +34,22 @@ const getTransactions = async (req, res) => {
 };
 
 // GET /api/summary
-// GET /api/summary
 const getSummary = async (req, res) => {
   try {
     // Existing overall summary
+
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
     const result = await Transaction.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfDay,
+            $lt: endOfDay,
+          },
+        },
+      },
       {
         $group: {
           _id: "$type",
